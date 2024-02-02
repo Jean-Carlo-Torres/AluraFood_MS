@@ -29,7 +29,6 @@ public class PagamentoService {
     public PagamentoDto obterPorId(Long id){
         Pagamento pagamento = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException());
-
         return modelMapper.map(pagamento, PagamentoDto.class);
     }
 
