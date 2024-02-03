@@ -34,7 +34,7 @@ public class PedidoService {
 
     public PedidoDto obterPorId(Long id) {
         Pedido pedido = repository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException());
+                .orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado com o ID: " + id));
 
         return modelMapper.map(pedido, PedidoDto.class);
     }
