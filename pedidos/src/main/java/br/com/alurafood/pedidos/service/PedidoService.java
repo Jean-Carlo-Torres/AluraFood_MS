@@ -54,9 +54,9 @@ public class PedidoService {
 
         Pedido pedido = repository.porIdComItens(id);
 
-        if (pedido == null) {
-            throw new EntityNotFoundException();
-        }
+//        if (pedido == null) {
+//            throw new EntityNotFoundException();
+//        }
 
         pedido.setStatus(dto.getStatus());
         repository.atualizaStatus(dto.getStatus(), pedido);
