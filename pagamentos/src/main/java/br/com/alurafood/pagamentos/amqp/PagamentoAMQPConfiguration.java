@@ -14,7 +14,7 @@ public class PagamentoAMQPConfiguration {
 
     @Bean
     public Queue criaFila() {
-        return QueueBuilder.nonDurable("Pagamento concluído").build();
+        return QueueBuilder.nonDurable("pagamento.concluido").build();
     }
 
     @Bean
