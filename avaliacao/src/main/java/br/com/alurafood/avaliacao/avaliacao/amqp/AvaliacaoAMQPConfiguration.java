@@ -1,6 +1,11 @@
-package br.com.alurafood.pedidos.amqp;
+package br.com.alurafood.avaliacao.avaliacao.amqp;
 
-import org.springframework.amqp.core.*;
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.ExchangeBuilder;
+import org.springframework.amqp.core.FanoutExchange;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.QueueBuilder;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -11,25 +16,24 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class PedidoAMQPConfiguration {
-
+public class AvaliacaoAMQPConfiguration {
     @Bean
-    public Jackson2JsonMessageConverter messageConverter() {
-        return new Jackson2JsonMessageConverter();
+    public Jackson2JsonMessageConverter messageConverter(){
+        return  new Jackson2JsonMessageConverter();
     }
 
     @Bean
     public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory,
-                                         Jackson2JsonMessageConverter messageConverter) {
+                                         Jackson2JsonMessageConverter messageConverter){
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
         rabbitTemplate.setMessageConverter(messageConverter);
-        return rabbitTemplate;
+        return  rabbitTemplate;
     }
 
     @Bean
-    public Queue filaDetalhesPedido() {
+    public Queue filaDetalhesAvaliacao() {
         return QueueBuilder
-                .nonDurable("pagamentos.detalhes-pedido")
+                .nonDurable("pagamentos.detalhes-avaliacao")
                 .build();
     }
 
@@ -43,17 +47,18 @@ public class PedidoAMQPConfiguration {
     @Bean
     public Binding bindPagamentoPedido(FanoutExchange fanoutExchange) {
         return BindingBuilder
-                .bind(filaDetalhesPedido())
+                .bind(filaDetalhesAvaliacao())
                 .to(fanoutExchange());
     }
 
     @Bean
-    public RabbitAdmin criaAdmin(ConnectionFactory conn){
+    public RabbitAdmin criaRabbitAdmin(ConnectionFactory conn) {
         return new RabbitAdmin(conn);
     }
 
     @Bean
-    public ApplicationListener<ApplicationReadyEvent> inicializacao(RabbitAdmin admin){
-        return event -> admin.initialize();
+    public ApplicationListener<ApplicationReadyEvent> inicializaAdmin(RabbitAdmin rabbitAdmin) {
+        return event -> rabbitAdmin.initialize();
     }
+
 }

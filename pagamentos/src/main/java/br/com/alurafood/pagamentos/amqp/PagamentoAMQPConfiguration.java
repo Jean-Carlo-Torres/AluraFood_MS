@@ -1,5 +1,6 @@
 package br.com.alurafood.pagamentos.amqp;
 
+import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.QueueBuilder;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -40,5 +41,10 @@ public class PagamentoAMQPConfiguration {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
         rabbitTemplate.setMessageConverter(messageConverter);
         return rabbitTemplate;
+    }
+
+    @Bean
+    public FanoutExchange fanoutExchange(){
+        return new FanoutExchange("pagamentos.ex");
     }
 }
